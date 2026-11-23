@@ -1,0 +1,27 @@
+version = "1.0"
+
+# Only the graded source file leaves the agent's container. The verifier runs
+# in a fresh container built from the same image, so build-script edits,
+# planted binaries or a patched compiler in the agent's container never reach it.
+artifacts = ["/app/calday.f"]
+
+[metadata]
+author_name = "Varun R Darji"
+difficulty = "medium"
+difficulty_note = "One-line root cause, but finding it needs Fortran fixed-form knowledge: the century leap-year term sits past column 72, which gfortran silently ignores. The formula itself reads as correct. Visible symptoms are an off-by-51-days ADD, a wrong weekday, and DIFF errors across 1700/1800/1900/2100. A constant-offset patch fixes the visible examples but not the hidden 1601..3000 dates."
+category = "software-engineering"
+kind = "language-driven"
+tags = ["fortran", "legacy", "bug-fix", "fixed-form"]
+
+[verifier]
+timeout_sec = 300.0
+environment_mode = "separate"
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 4096

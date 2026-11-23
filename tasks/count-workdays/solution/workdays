@@ -1,0 +1,55 @@
+#!/usr/bin/env python3
+"""Oracle for count-workdays: closed-form weekday count, minus holidays."""
+import datetime as dt
+import os
+import re
+import sys
+
+HOLIDAYS = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..",
+                        "holidays.txt")
+DATE = re.compile(r"^(\d{4})-(\d{2})-(\d{2})$")
+
+
+def parse(text):
+    m = DATE.match(text)
+    if not m:
+        raise ValueError(text)
+    d = dt.date(*map(int, m.groups()))
+    if not 1601 <= d.year <= 3000:
+        raise ValueError(text)
+    return d
+
+
+def weekdays(a, b):
+    """Mon-Fri days in [a, b), for a <= b."""
+    weeks, rest = divmod((b - a).days, 7)
+    n = weeks * 5
+    wd = a.weekday()
+    for i in range(rest):
+        if (wd + i) % 7 < 5:
+            n += 1
+    return n
+
+
+def main(argv):
+    try:
+        start, end = (parse(x) for x in argv)
+    except ValueError:
+        return 2
+    sign = 1
+    if end < start:
+        start, end, sign = end, start, -1
+    holidays = set()
+    with open(HOLIDAYS) as fh:
+        for line in fh:
+            line = line.strip()
+            if line and not line.startswith("#"):
+                holidays.add(dt.date.fromisoformat(line))
+    n = weekdays(start, end) - sum(1 for h in holidays
+                                   if start <= h < end and h.weekday() < 5)
+    print(sign * n)
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main(sys.argv[1:]) if len(sys.argv) == 3 else 2)

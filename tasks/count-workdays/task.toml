@@ -1,0 +1,27 @@
+version = "1.0"
+
+# Only /app leaves the agent's container. The verifier runs in a fresh
+# container built from the same image, with fresh /tests and a regenerated
+# /app/holidays.txt, so changes outside /app never reach it.
+artifacts = ["/app"]
+
+[metadata]
+author_name = "Varun R Darji"
+difficulty = "easy"
+difficulty_note = "Outcome-driven: the statement gives only the behaviour, never the code. Any language in the container works. Easy to start, but there are several edges to get right: a half-open interval, reversed and equal pairs, weekend holidays, duplicates, comments, invalid dates with exit status 2, and holidays read at run time. Spans of up to 1,400 years must still finish within 5 s per call."
+category = "software-engineering"
+kind = "outcome-driven"
+tags = ["cli", "dates", "outcome", "behavioural-grading"]
+
+[verifier]
+timeout_sec = 300.0
+environment_mode = "separate"
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 4096
