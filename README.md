@@ -1,10 +1,11 @@
-# Two verified tasks and a small page that shows them
+# Three verified tasks and a small page that shows them
 
 Take-home for the Full-Stack Software Engineer role at Adzzat Labs.
 
-- **Two Terminal-Bench-style tasks** in Harbor format, built on one small
-  codebase ([`calday/`](calday/), a Fortran 77 date calculator, MIT, written
-  for this exercise):
+- **Three Terminal-Bench-style tasks** in Harbor format (the brief asked
+  for two; the third is the optional stretch), built on two small codebases
+  written for this exercise (MIT): [`calday/`](calday/), a Fortran 77 date
+  calculator, and [`invtot/`](invtot/), a COBOL invoice-balance program:
   - [`fix-calday-dates`](tasks/fix-calday-dates/): **language-driven**,
     medium. Fix wrong date arithmetic in the Fortran program. The root cause
     is a fixed-form Fortran rule, not the algorithm.
@@ -12,9 +13,13 @@ Take-home for the Full-Stack Software Engineer role at Adzzat Labs.
     the goal is stated: a `workdays START END` CLI that counts working days
     against a holiday file. The code is never described, and grading is purely
     behavioural.
+  - [`fix-invtot-balances`](tasks/fix-invtot-balances/): **language-driven**,
+    medium, COBOL (GnuCOBOL). Wrong customer balances caused by three defects
+    in `PIC` clauses and `COMPUTE`: no sign, no `ROUNDED`, and a field too
+    narrow for large balances.
 - **Hidden graders** run in Harbor's separate verifier container, on fresh
   random inputs every run. A [shortcut demo](shortcuts/run_shortcuts.py)
-  shows four shortcuts that the graders block.
+  shows five shortcuts that the graders block.
 - **A minimal full-stack page** ([`page/`](page/)): FastAPI serves
   `GET /api/tasks` and `GET /api/tasks/{id}`, reading the task folders
   directly. A single static HTML/JS page shows a list and a detail view:
@@ -26,7 +31,7 @@ AI tools and where I corrected them: [docs/AI_TOOLS.md](docs/AI_TOOLS.md).
 ## Layout
 
 ```
-calday/                 the small codebase (correct upstream version)
+calday/, invtot/        the two small codebases (correct upstream versions)
 tasks/<id>/
   instruction.md        statement shown to the agent
   task.toml             Harbor config: difficulty + difficulty_note, kind,
@@ -64,9 +69,9 @@ or in Docker, from the repo root: `docker compose up --build`.
 **The tasks in Harbor:**
 
 ```
-harbor lint tasks/fix-calday-dates tasks/count-workdays
-harbor run -p tasks -a oracle     # expect 1.0 on both
-harbor run -p tasks -a nop        # expect 0.0 on both
+harbor lint tasks/fix-calday-dates tasks/count-workdays tasks/fix-invtot-balances
+harbor run -p tasks -a oracle     # expect 1.0 on all three
+harbor run -p tasks -a nop        # expect 0.0 on all three
 ```
 
 **Shortcut demo** (needs Docker): `python shortcuts/run_shortcuts.py`
@@ -81,7 +86,7 @@ harbor run -p tasks -a nop        # expect 0.0 on both
 
 ```
 cd page
-uv run pytest -q          # API tests: list, detail, 404 and path-traversal ids, index
+uv run pytest -q          # API tests: list, two details, 404 and path-traversal ids, index
 ```
 
 The task graders are tested by the Harbor oracle and nop runs and by the
@@ -90,16 +95,19 @@ must score 1.0.
 
 ## Design choices, briefly
 
-- **One codebase, two kinds of task.** Task 1 is about the *language*: the
+- **Two kinds of task.** Task 1 is about the *language*: the
   bug only makes sense once you know that fixed-form Fortran ignores columns
-  73 and beyond. Task 2 is about the *outcome*: any language in the container
+  73 and beyond. Task 3 likewise turns on COBOL data semantics (`PIC S`,
+  `ROUNDED`, digit counts), not on the control flow. Task 2 is about the
+  *outcome*: any language in the container
   is fine.
 - **Only the artifact crosses to the verifier.** That is `calday.f` for
-  task 1 and `/app` for task 2, so build-flag edits or planted files elsewhere
+  task 1, `/app` for task 2 and `invtot.cbl` for task 3, so build-flag edits or planted files elsewhere
   do nothing. The grader compiles with a fixed command and runs the
   submission as `nobody`. `/tests` is unreadable to it.
 - **Differential grading on random inputs.** Expected answers come from
-  Python's `datetime`, computed in memory per run. Task 2 also swaps in a
+  Python's `datetime` (tasks 1 and 2) or `Decimal` with half-up rounding
+  (task 3), computed in memory per run. Task 2 also swaps in a
   fresh, randomly generated `holidays.txt`.
 - **The page reads the task folders directly**, so it cannot drift from what
   Harbor runs. The statement's HTML is rendered from this repo's own

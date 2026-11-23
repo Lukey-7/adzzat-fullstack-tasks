@@ -1,0 +1,27 @@
+version = "1.0"
+
+# Only the graded source file leaves the agent's container. The verifier runs
+# in a fresh container built from the same image, so build-script edits,
+# planted binaries or a patched compiler in the agent's container never reach it.
+artifacts = ["/app/invtot.cbl"]
+
+[metadata]
+author_name = "Varun R Darji"
+difficulty = "medium"
+difficulty_note = "Three small defects, all in COBOL data semantics rather than logic: the balance field has no S in its PIC, so a negative balance is stored as its absolute value; COMPUTE lacks ROUNDED, so amounts are truncated to the cent; and the field holds only 7 integer digits, so balances above 9,999,999.99 silently lose their high-order digits. The statement reports the first two by symptom and only hints at the third (\"our largest accounts\"). Fixing just the reported symptoms passes the visible examples but not the hidden grader."
+category = "software-engineering"
+kind = "language-driven"
+tags = ["cobol", "legacy", "bug-fix", "picture-clauses"]
+
+[verifier]
+timeout_sec = 300.0
+environment_mode = "separate"
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 4096

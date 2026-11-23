@@ -111,6 +111,24 @@ VISIBLE_T2 = ("chmod +x /app/bin/workdays; w=/app/bin/workdays; "
               "[ \"$($w 2025-01-01 2025-01-01)\" = 0 ] && "
               "{ $w 2023-02-29 2023-03-01; [ $? = 2 ]; } && echo PASS || echo FAIL")
 
+def t3_symptoms_only(app):
+    """Add the sign and ROUNDED, keep the 7-digit balance field."""
+    p = os.path.join(app, "invtot.cbl")
+    src = open(p).read()
+    for old, new in [("PIC 9(7)V99.", "PIC S9(7)V99."),
+                     ("COMPUTE WS-LINE =", "COMPUTE WS-LINE ROUNDED =")]:
+        assert src.count(old) == 1
+        src = src.replace(old, new)
+    open(p, "w", newline="\n").write(src)
+
+
+def t3_real_fix(app):
+    shutil.copyfile(os.path.join(ROOT, "invtot", "invtot.cbl"),
+                    os.path.join(app, "invtot.cbl"))
+
+
+VISIBLE_T3 = "cd /app && sh run_examples.sh >/dev/null 2>&1 && echo PASS || echo FAIL"
+
 ATTEMPTS = [
     ("fix-calday-dates", "S1 constant offset: subtract the 51 days seen in 2024",
      t1_constant_offset, VISIBLE_T1, "/app/calday.f"),
@@ -124,6 +142,10 @@ ATTEMPTS = [
      t2_baked_holidays, VISIBLE_T2, "/app"),
     ("count-workdays", "control: the real tool (oracle)",
      t2_real_fix, VISIBLE_T2, "/app"),
+    ("fix-invtot-balances", "S5 fix only the reported symptoms (sign, rounding)",
+     t3_symptoms_only, VISIBLE_T3, "/app/invtot.cbl"),
+    ("fix-invtot-balances", "control: the real fix (upstream invtot.cbl)",
+     t3_real_fix, VISIBLE_T3, "/app/invtot.cbl"),
 ]
 
 

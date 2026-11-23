@@ -4,12 +4,12 @@
     "attempt": "S1 constant offset: subtract the 51 days seen in 2024",
     "visible_check": "FAIL",
     "hidden_reward": 0.0,
-    "passed": 199,
+    "passed": 203,
     "cases": 776,
     "example_failure": {
-      "query": "DOW 2282 12 25",
+      "query": "DOW 2100 3 1",
       "expected": "MONDAY",
-      "got": "WEDNESDAY"
+      "got": "TUESDAY"
     }
   },
   {
@@ -17,12 +17,12 @@
     "attempt": "S2 build flag: -ffixed-line-length-none in build.sh",
     "visible_check": "PASS",
     "hidden_reward": 0.0,
-    "passed": 149,
+    "passed": 146,
     "cases": 776,
     "example_failure": {
-      "query": "DIFF 2129 4 4 2753 1 8",
-      "expected": "227825",
-      "got": "227830"
+      "query": "DIFF 2093 1 7 2829 8 1",
+      "expected": "269024",
+      "got": "269030"
     }
   },
   {
@@ -56,7 +56,7 @@
     "attempt": "S4 bake the shipped holidays into the tool",
     "visible_check": "PASS",
     "hidden_reward": 0.0,
-    "passed": 126,
+    "passed": 120,
     "cases": 200,
     "example_failure": {
       "args": [
@@ -75,6 +75,29 @@
     "hidden_reward": 1.0,
     "passed": 200,
     "cases": 200,
+    "example_failure": null
+  },
+  {
+    "task": "fix-invtot-balances",
+    "attempt": "S5 fix only the reported symptoms (sign, rounding)",
+    "visible_check": "PASS",
+    "hidden_reward": 0.0,
+    "passed": 4,
+    "cases": 28,
+    "example_failure": {
+      "file": 3,
+      "line": 0,
+      "expected": "IHMJOW +124748849.38",
+      "got": "IHMJOW +004748849.38"
+    }
+  },
+  {
+    "task": "fix-invtot-balances",
+    "attempt": "control: the real fix (upstream invtot.cbl)",
+    "visible_check": "PASS",
+    "hidden_reward": 1.0,
+    "passed": 28,
+    "cases": 28,
     "example_failure": null
   }
 ]

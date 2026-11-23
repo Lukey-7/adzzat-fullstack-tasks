@@ -41,6 +41,10 @@ the code; it did not solve or score the tasks.
    nothing about the root cause, so I replaced it with the one-line edit (move
    the century term onto a continuation line). Now `solve.sh` documents the
    fix.
-6. **Small things:** a wrong `harbor lint -p` flag (lint takes task
+6. **The first COBOL grader import failed on Windows.** I generated the
+   visible examples by importing the Linux-only grader (`import pwd`) on the
+   Windows host. I stubbed `pwd` for that one-off generation, so the examples
+   come from the same reference model that grades.
+7. **Small things:** a wrong `harbor lint -p` flag (lint takes task
    directories). The shortcut demo also parsed test.sh output as pure JSON and
    crashed. It now extracts the JSON object.

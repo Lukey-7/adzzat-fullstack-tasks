@@ -4,14 +4,14 @@
       {
         "agent": "nop",
         "reward": 0.0,
-        "job": "2026-11-23__11-16-02",
+        "job": "2026-11-23__12-45-00",
         "cases": null,
         "passed": null
       },
       {
         "agent": "oracle",
         "reward": 1.0,
-        "job": "2026-11-23__11-27-41",
+        "job": "2026-11-23__12-43-47",
         "cases": 200,
         "passed": 200
       }
@@ -28,7 +28,7 @@
         "attempt": "S4 bake the shipped holidays into the tool",
         "visible_check": "PASS",
         "hidden_reward": 0.0,
-        "passed": 126,
+        "passed": 120,
         "cases": 200
       },
       {
@@ -67,14 +67,14 @@
       {
         "agent": "nop",
         "reward": 0.0,
-        "job": "2026-11-23__11-16-02",
+        "job": "2026-11-23__12-45-00",
         "cases": 776,
-        "passed": 138
+        "passed": 135
       },
       {
         "agent": "oracle",
         "reward": 1.0,
-        "job": "2026-11-23__11-27-41",
+        "job": "2026-11-23__12-43-47",
         "cases": 776,
         "passed": 776
       }
@@ -84,14 +84,14 @@
         "attempt": "S1 constant offset: subtract the 51 days seen in 2024",
         "visible_check": "FAIL",
         "hidden_reward": 0.0,
-        "passed": 199,
+        "passed": 203,
         "cases": 776
       },
       {
         "attempt": "S2 build flag: -ffixed-line-length-none in build.sh",
         "visible_check": "PASS",
         "hidden_reward": 0.0,
-        "passed": 149,
+        "passed": 146,
         "cases": 776
       },
       {
@@ -122,6 +122,62 @@
         "passed": null,
         "cases": null,
         "transcript": "runs/fix-calday-dates-1795414203.json"
+      }
+    ]
+  },
+  "fix-invtot-balances": {
+    "harbor": [
+      {
+        "agent": "nop",
+        "reward": 0.0,
+        "job": "2026-11-23__12-45-00",
+        "cases": 28,
+        "passed": 2
+      },
+      {
+        "agent": "oracle",
+        "reward": 1.0,
+        "job": "2026-11-23__12-43-47",
+        "cases": 28,
+        "passed": 28
+      }
+    ],
+    "shortcuts": [
+      {
+        "attempt": "S5 fix only the reported symptoms (sign, rounding)",
+        "visible_check": "PASS",
+        "hidden_reward": 0.0,
+        "passed": 4,
+        "cases": 28
+      },
+      {
+        "attempt": "control: the real fix (upstream invtot.cbl)",
+        "visible_check": "PASS",
+        "hidden_reward": 1.0,
+        "passed": 28,
+        "cases": 28
+      }
+    ],
+    "agent_runs": [
+      {
+        "agent": "mini_agent",
+        "model": "qwen2.5-coder:3b",
+        "reward": 0.0,
+        "steps": 30,
+        "minutes": 8.0,
+        "passed": 2,
+        "cases": 28,
+        "transcript": "runs/fix-invtot-balances-1795418690.json"
+      },
+      {
+        "agent": "mini_agent",
+        "model": "qwen2.5-coder:3b",
+        "reward": 0.0,
+        "steps": 30,
+        "minutes": 8.4,
+        "passed": 2,
+        "cases": 28,
+        "transcript": "runs/fix-invtot-balances-1795419201.json"
       }
     ]
   }
