@@ -4,12 +4,12 @@
     "attempt": "S1 constant offset: subtract the 51 days seen in 2024",
     "visible_check": "FAIL",
     "hidden_reward": 0.0,
-    "passed": 183,
+    "passed": 199,
     "cases": 776,
     "example_failure": {
-      "query": "DIFF 1979 5 16 2934 12 21",
-      "expected": "349026",
-      "got": "349033"
+      "query": "DOW 2282 12 25",
+      "expected": "MONDAY",
+      "got": "WEDNESDAY"
     }
   },
   {
@@ -17,12 +17,12 @@
     "attempt": "S2 build flag: -ffixed-line-length-none in build.sh",
     "visible_check": "PASS",
     "hidden_reward": 0.0,
-    "passed": 146,
+    "passed": 149,
     "cases": 776,
     "example_failure": {
-      "query": "DIFF 2392 1 13 2070 8 7",
-      "expected": "-117401",
-      "got": "-117404"
+      "query": "DIFF 2129 4 4 2753 1 8",
+      "expected": "227825",
+      "got": "227830"
     }
   },
   {
@@ -56,7 +56,7 @@
     "attempt": "S4 bake the shipped holidays into the tool",
     "visible_check": "PASS",
     "hidden_reward": 0.0,
-    "passed": 125,
+    "passed": 126,
     "cases": 200,
     "example_failure": {
       "args": [

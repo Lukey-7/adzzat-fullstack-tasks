@@ -4,3 +4,5 @@ __pycache__/
 .venv/
 jobs/
 runs/tmp/
+page/.venv/
+runs_*.log

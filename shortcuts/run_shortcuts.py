@@ -46,8 +46,9 @@ def t1_build_flag(app):
 
 
 def t1_real_fix(app):
-    shutil.copyfile(os.path.join(TASKS, "fix-calday-dates", "solution",
-                                 "calday.f"), os.path.join(app, "calday.f"))
+    """The upstream calday source, with the formula inside column 72."""
+    shutil.copyfile(os.path.join(ROOT, "calday", "calday.f"),
+                    os.path.join(app, "calday.f"))
 
 
 HARDCODED = """#!/bin/sh

@@ -1,0 +1,128 @@
+{
+  "count-workdays": {
+    "harbor": [
+      {
+        "agent": "nop",
+        "reward": 0.0,
+        "job": "2026-11-23__11-16-02",
+        "cases": null,
+        "passed": null
+      },
+      {
+        "agent": "oracle",
+        "reward": 1.0,
+        "job": "2026-11-23__11-27-41",
+        "cases": 200,
+        "passed": 200
+      }
+    ],
+    "shortcuts": [
+      {
+        "attempt": "S3 hardcode the visible examples",
+        "visible_check": "PASS",
+        "hidden_reward": 0.0,
+        "passed": 12,
+        "cases": 200
+      },
+      {
+        "attempt": "S4 bake the shipped holidays into the tool",
+        "visible_check": "PASS",
+        "hidden_reward": 0.0,
+        "passed": 126,
+        "cases": 200
+      },
+      {
+        "attempt": "control: the real tool (oracle)",
+        "visible_check": "PASS",
+        "hidden_reward": 1.0,
+        "passed": 200,
+        "cases": 200
+      }
+    ],
+    "agent_runs": [
+      {
+        "agent": "mini_agent",
+        "model": "qwen2.5-coder:3b",
+        "reward": 0.0,
+        "steps": 4,
+        "minutes": 3.0,
+        "passed": null,
+        "cases": null,
+        "transcript": "runs/count-workdays-1795413722.json"
+      },
+      {
+        "agent": "mini_agent",
+        "model": "qwen2.5-coder:3b",
+        "reward": 0.0,
+        "steps": 4,
+        "minutes": 1.0,
+        "passed": null,
+        "cases": null,
+        "transcript": "runs/count-workdays-1795414268.json"
+      }
+    ]
+  },
+  "fix-calday-dates": {
+    "harbor": [
+      {
+        "agent": "nop",
+        "reward": 0.0,
+        "job": "2026-11-23__11-16-02",
+        "cases": 776,
+        "passed": 138
+      },
+      {
+        "agent": "oracle",
+        "reward": 1.0,
+        "job": "2026-11-23__11-27-41",
+        "cases": 776,
+        "passed": 776
+      }
+    ],
+    "shortcuts": [
+      {
+        "attempt": "S1 constant offset: subtract the 51 days seen in 2024",
+        "visible_check": "FAIL",
+        "hidden_reward": 0.0,
+        "passed": 199,
+        "cases": 776
+      },
+      {
+        "attempt": "S2 build flag: -ffixed-line-length-none in build.sh",
+        "visible_check": "PASS",
+        "hidden_reward": 0.0,
+        "passed": 149,
+        "cases": 776
+      },
+      {
+        "attempt": "control: the real fix (oracle source)",
+        "visible_check": "PASS",
+        "hidden_reward": 1.0,
+        "passed": 776,
+        "cases": 776
+      }
+    ],
+    "agent_runs": [
+      {
+        "agent": "mini_agent",
+        "model": "qwen2.5-coder:3b",
+        "reward": 0.0,
+        "steps": 3,
+        "minutes": 2.2,
+        "passed": 133,
+        "cases": 776,
+        "transcript": "runs/fix-calday-dates-1795413536.json"
+      },
+      {
+        "agent": "mini_agent",
+        "model": "qwen2.5-coder:3b",
+        "reward": 0.0,
+        "steps": 3,
+        "minutes": 7.9,
+        "passed": null,
+        "cases": null,
+        "transcript": "runs/fix-calday-dates-1795414203.json"
+      }
+    ]
+  }
+}

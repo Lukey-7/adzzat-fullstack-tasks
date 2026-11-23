@@ -1,0 +1,123 @@
+{
+ "result": {
+  "task": "count-workdays",
+  "agent": "mini_agent",
+  "model": "qwen2.5-coder:3b",
+  "steps": 4,
+  "minutes": 2.7,
+  "reward": 0.0,
+  "grader": {
+   "cases": 200,
+   "passed": 0,
+   "error": null,
+   "first_failures": [
+    {
+     "args": [
+      "2024-12-23",
+      "2024-12-30"
+     ],
+     "expected": "5",
+     "got": "<FileNotFoundError>",
+     "status": null
+    },
+    {
+     "args": [
+      "2024-12-30",
+      "2024-12-23"
+     ],
+     "expected": "-5",
+     "got": "<FileNotFoundError>",
+     "status": null
+    },
+    {
+     "args": [
+      "2025-01-01",
+      "2025-01-01"
+     ],
+     "expected": "0",
+     "got": "<FileNotFoundError>",
+     "status": null
+    },
+    {
+     "args": [
+      "1601-01-01",
+      "3000-12-31"
+     ],
+     "expected": "364799",
+     "got": "<FileNotFoundError>",
+     "status": null
+    },
+    {
+     "args": [
+      "3000-12-31",
+      "1601-01-01"
+     ],
+     "expected": "-364799",
+     "got": "<FileNotFoundError>",
+     "status": null
+    },
+    {
+     "args": [
+      "2743-08-12",
+      "2743-08-11"
+     ],
+     "expected": "-1",
+     "got": "<FileNotFoundError>",
+     "status": null
+    },
+    {
+     "args": [
+      "1831-06-12",
+      "1831-06-11"
+     ],
+     "expected": "0",
+     "got": "<FileNotFoundError>",
+     "status": null
+    },
+    {
+     "args": [
+      "2451-09-08",
+      "2451-09-09"
+     ],
+     "expected": "1",
+     "got": "<FileNotFoundError>",
+     "status": null
+    }
+   ]
+  }
+ },
+ "transcript": [
+  {
+   "step": 0,
+   "action": {
+    "action": "write",
+    "path": "/app/workdays.sh",
+    "content": "#!/bin/bash\n\nSTART=$1\nEND=$2\n\nif [[ ! $START =~ ^[0-9]{4}-[0-9]{2}-[0-9]{2}$ || ! $END =~ ^[0-9]{4}-[0-9]{2}-[0-9]{2}$ ]]; then\n  exit 2\nfi\n\nif [[ $START == $END ]]; then\n  echo 0\n  exit 0\nfi\n\nif [[ $START > $END ]]; then\n  START=$END\n  END=$START\nfi\n\nHOLIDAYS=$(cat /app/holidays.txt | grep -E '^[0-9]{4}-[0-9]{2}-[0-9]{2}$' | sort -u)\n\nfunction is_weekend() {\n  local date=$1\n  if [[ $(date -d $date +%u) -eq 6 || $(date -d $date +%u) -eq 7 ]]; then\n    return 0\n  else\n    return 1\n  fi\n}\n\nfunction is_holiday() {\n  local date=$1\n  for holiday in $HOLIDAYS; do\n    if [[ $date == $holiday ]]; then\n      return 0\n    fi\n  done\n  return 1\n}\n\nfunction count_working_days() {\n  local start=$1\n  local end=$2\n  local count=0\n  local date=$start\n\n  while [[ $date < $end ]]; do\n    if ! is_weekend $date && ! is_holiday $date; then\n      count=$((count + 1))\n    fi\n    date=$(date -d $date +1day)\n  done\n\n  echo $count\n}\n\ncount_working_days $START $END"
+   },
+   "observation": "written"
+  },
+  {
+   "step": 1,
+   "action": {
+    "action": "run",
+    "cmd": "chmod +x /app/workdays.sh"
+   },
+   "observation": "exit status 0\n"
+  },
+  {
+   "step": 2,
+   "action": {
+    "action": "write",
+    "path": "/app/bin/workdays",
+    "content": "#!/bin/bash\n\n/app/workdays.sh $1 $2"
+   },
+   "observation": "written"
+  },
+  {
+   "step": 3,
+   "action": {
+    "action": "done"
+   }
+  }
+ ]
+}

@@ -1,0 +1,41 @@
+{
+ "result": {
+  "task": "fix-calday-dates",
+  "agent": "mini_agent",
+  "model": "qwen2.5-coder:3b",
+  "steps": 3,
+  "minutes": 7.9,
+  "reward": 0.0,
+  "grader": {
+   "cases": null,
+   "passed": null,
+   "error": "compile failed: calday.f:104:72:\n\n  104 |       LEAP = MOD(Y, 4) .EQ. 0 .AND. (MOD(Y, 100) .NE. 0 .OR. MOD(Y, 400) .EQ. 0)\n      |                                                                        1\nError: Expected a right parenthesis in expression at (1)\n",
+   "first_failures": null
+  }
+ },
+ "transcript": [
+  {
+   "step": 0,
+   "action": {
+    "action": "read",
+    "path": "/app/calday.f"
+   },
+   "observation": "C     CALDAY - a small calendar calculator for Gregorian dates.\nC\nC     Reads queries from standard input, one per line, and writes one\nC     answer line per query:\nC\nC       DIFF Y1 M1 D1 Y2 M2 D2   days from the first date to the second\nC                                (negative if the second is earlier)\nC       ADD  Y M D N             the date N days after Y-M-D (N may be\nC                                negative), written as YYYY-MM-DD\nC       DOW  Y M D               day of the week, e.g. MONDAY\nC\nC     Years must be in 1601..3000. Any invalid query, invalid date or\nC     out-of-range result gives the answer line ERROR. Blank lines are\nC     skipped.\nC\nC     Day numbers use the Julian Day Number formulas of Fliegel and\nC     Van Flandern, Comm. ACM 11(10):657 (1968).\nC\nC     Copyright (c) 2026 Varun R Darji. MIT licence, see LICENSE.\nC\n      PROGRAM CALDAY\n      INTEGER Y1, M1, D1, Y2, M2, D2, N, J, K, IOS\n      INTEGER JDN\n      LOGICAL VALID\n      CHARACTER*200 LINE\n      CHARACTER*9 DNAME(0:6)\n      DATA DNAME /'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY',\n     &            'FRIDAY', 'SATURDAY', 'SUNDAY'/\nC\n   10 READ (*, '(A)', IOSTAT=IOS) LINE\n      IF (IOS .NE. 0) STOP\n      IF (LINE .EQ. ' ') GO TO 10\n      LINE = ADJUSTL(LINE)\nC\n      IF (LINE(1:5) .EQ. 'DIFF ') THEN\n         READ (LINE(6:), *, IOSTAT=IOS) Y1, M1, D1, Y2, M2, D2\n         IF (IOS .NE. 0) GO TO 90\n         IF (.NOT. VALID(Y1, M1, D1)) GO TO 90\n         IF (.NOT. VALID(Y2, M2, D2)) GO TO 90\n         WRITE (*, '(I0)') JDN(Y2, M2, D2) - JDN(Y1, M1, D1)\nC\n      ELSE IF (LINE(1:4) .EQ. 'ADD ') THEN\n         READ (LINE(5:), *, IOSTAT=IOS) Y1, M1, D1, N\n         IF (IOS .NE. 0) GO TO 90\n         IF (.NOT. VALID(Y1, M1, D1)) GO TO 90\n         J = JDN(Y1, M1, D1) + N\n         CALL GREG(J, Y2, M2, D2)\n         IF (.NOT. VALID(Y2, M2, D2)) GO TO 90\n         WRITE (*, '(I4.4, A, I2.2, A, I2.2)') Y2, '-', M2, '-', D2\nC\n      ELSE IF (LINE(1:4) .EQ. 'DOW ') THEN\n         READ (LINE(5:), *, IOSTAT=IOS)"
+  },
+  {
+   "step": 1,
+   "action": {
+    "action": "write",
+    "path": "/app/calday.f",
+    "content": "C     CALDAY - a small calendar calculator for Gregorian dates.\nC\nC     Reads queries from standard input, one per line, and writes one\nC     answer line per query:\nC\nC       DIFF Y1 M1 D1 Y2 M2 D2   days from the first date to the second\nC                                (negative if the second is earlier)\nC       ADD  Y M D N             the date N days after Y-M-D (N may be\nC                                negative), written as YYYY-MM-DD\nC       DOW  Y M D               day of the week, e.g. MONDAY\nC\nC     Years must be in 1601..3000. Any invalid query, invalid date or\nC     out-of-range result gives the answer line ERROR. Blank lines are\nC     skipped.\nC\nC     Day numbers use the Julian Day Number formulas of Fliegel and\nC     Van Flandern, Comm. ACM 11(10):657 (1968).\nC\nC     Copyright (c) 2026 Varun R Darji. MIT licence, see LICENSE.\nC\n      PROGRAM CALDAY\n      INTEGER Y1, M1, D1, Y2, M2, D2, N, J, K, IOS\n      INTEGER JDN\n      LOGICAL VALID\n      CHARACTER*200 LINE\n      CHARACTER*9 DNAME(0:6)\n      DATA DNAME /'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY',\n     &            'FRIDAY', 'SATURDAY', 'SUNDAY'/\nC\n   10 READ (*, '(A)', IOSTAT=IOS) LINE\n      IF (IOS .NE. 0) STOP\n      IF (LINE .EQ. ' ') GO TO 10\n      LINE = ADJUSTL(LINE)\nC\n      IF (LINE(1:5) .EQ. 'DIFF ') THEN\n         READ (LINE(6:), *, IOSTAT=IOS) Y1, M1, D1, Y2, M2, D2\n         IF (IOS .NE. 0) GO TO 90\n         IF (.NOT. VALID(Y1, M1, D1)) GO TO 90\n         IF (.NOT. VALID(Y2, M2, D2)) GO TO 90\n         WRITE (*, '(I0)') JDN(Y2, M2, D2) - JDN(Y1, M1, D1)\nC\n      ELSE IF (LINE(1:4) .EQ. 'ADD ') THEN\n         READ (LINE(5:), *, IOSTAT=IOS) Y1, M1, D1, N\n         IF (IOS .NE. 0) GO TO 90\n         IF (.NOT. VALID(Y1, M1, D1)) GO TO 90\n         J = JDN(Y1, M1, D1) + N\n         CALL GREG(J, Y2, M2, D2)\n         IF (.NOT. VALID(Y2, M2, D2)) GO TO 90\n         WRITE (*, '(I4.4, A, I2.2, A, I2.2)') Y2, '-', M2, '-', D2\nC\n      ELSE IF (LINE(1:4) .EQ. 'DOW ') THEN\n         READ (LINE(5:), *, IOSTAT=IOS) Y1, M1, D1\n         IF (IOS .NE. 0) GO TO 90\n         IF (.NOT. VALID(Y1, M1, D1)) GO TO 90\nC        Julian Day Number 0 fell on a Monday.\n         K = MOD(JDN(Y1, M1, D1), 7)\n         WRITE (*, '(A)') TRIM(DNAME(K))\nC\n      ELSE\n         GO TO 90\n      END IF\n      GO TO 10\nC\n   90 WRITE (*, '(A)') 'ERROR'\n      GO TO 10\n      END\nC\nC     ------------------------------------------------------------------\nC     Julian Day Number of the Gregorian date Y-M-D.\nC\n      INTEGER FUNCTION JDN(Y, M, D)\n      INTEGER Y, M, D, A\n      A = (M - 14) / 12\n      JDN = D - 32075 + 1461*(Y + 4800 + A)/4 + 367*(M - 2 - A*12) / 12 - 3*((Y + 4900 + A)/100)/4\n      END\nC\nC     ------------------------------------------------------------------\nC     Inverse of JDN: the Gregorian date Y-M-D of Julian Day Number J.\nC\n      SUBROUTINE GREG(J, Y, M, D)\n      INTEGER J, Y, M, D, L, N, I, K\n      L = J + 68569\n      N = 4 * L / 146097\n      L = L - (146097 * N + 3) / 4\n      I = 4000 * (L + 1) / 1461001\n      L = L - 1461 * I / 4 + 31\n      K = 80 * L / 2447\n      D = L - 2447 * K / 80\n      L = K / 11\n      M = K + 2 - 12 * L\n      Y = 100 * (N - 49) + I + L\n      END\nC\nC     ------------------------------------------------------------------\nC     .TRUE. if Y-M-D is a real Gregorian date with Y in 1601..3000.\nC\n      LOGICAL FUNCTION VALID(Y, M, D)\n      INTEGER Y, M, D, DIM(12)\n      LOGICAL LEAP\n      DATA DIM /31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31/\n      VALID = .FALSE.\n      IF (Y .LT. 1601 .OR. Y .GT. 3000) RETURN\n      IF (M .LT. 1 .OR. M .GT. 12) RETURN\n      LEAP = MOD(Y, 4) .EQ. 0 .AND. (MOD(Y, 100) .NE. 0 .OR. MOD(Y, 400) .EQ. 0)\n      IF (D .LT. 1) RETURN\n      IF (M .EQ. 2 .AND. LEAP) THEN\n         IF (D .GT. 29) RETURN\n      ELSE\n         IF (D .GT. DIM(M)) RETURN\n      END IF\n      VALID = .TRUE.\n      END"
+   },
+   "observation": "written"
+  },
+  {
+   "step": 2,
+   "action": {
+    "action": "done"
+   }
+  }
+ ]
+}

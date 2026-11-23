@@ -1,0 +1,83 @@
+{
+ "result": {
+  "task": "fix-calday-dates",
+  "agent": "mini_agent",
+  "model": "qwen2.5-coder:3b",
+  "steps": 3,
+  "minutes": 2.2,
+  "reward": 0.0,
+  "grader": {
+   "cases": 776,
+   "passed": 126,
+   "error": null,
+   "first_failures": [
+    {
+     "query": "ADD 2405 12 25 -6870",
+     "expected": "2387-03-05",
+     "got": "2387-04-28"
+    },
+    {
+     "query": "DIFF 1644 11 5 1927 4 7",
+     "expected": "103150",
+     "got": "103153"
+    },
+    {
+     "query": "DOW 2467 1 13",
+     "expected": "THURSDAY",
+     "got": "TUESDAY"
+    },
+    {
+     "query": "ADD 2028 1 25 152758",
+     "expected": "2446-04-21",
+     "got": "2446-06-11"
+    },
+    {
+     "query": "DIFF 2689 8 18 2842 1 9",
+     "expected": "55661",
+     "got": "55662"
+    },
+    {
+     "query": "DIFF 2415 10 9 2786 8 15",
+     "expected": "135450",
+     "got": "135453"
+    },
+    {
+     "query": "DOW 2108 6 19",
+     "expected": "TUESDAY",
+     "got": "FRIDAY"
+    },
+    {
+     "query": "DOW 2487 12 15",
+     "expected": "MONDAY",
+     "got": "SATURDAY"
+    }
+   ]
+  }
+ },
+ "transcript": [
+  {
+   "step": 0,
+   "action": {
+    "action": "read",
+    "path": "/app/calday.f"
+   },
+   "observation": "C     CALDAY - a small calendar calculator for Gregorian dates.\nC\nC     Reads queries from standard input, one per line, and writes one\nC     answer line per query:\nC\nC       DIFF Y1 M1 D1 Y2 M2 D2   days from the first date to the second\nC                                (negative if the second is earlier)\nC       ADD  Y M D N             the date N days after Y-M-D (N may be\nC                                negative), written as YYYY-MM-DD\nC       DOW  Y M D               day of the week, e.g. MONDAY\nC\nC     Years must be in 1601..3000. Any invalid query, invalid date or\nC     out-of-range result gives the answer line ERROR. Blank lines are\nC     skipped.\nC\nC     Day numbers use the Julian Day Number formulas of Fliegel and\nC     Van Flandern, Comm. ACM 11(10):657 (1968).\nC\nC     Copyright (c) 2026 Varun R Darji. MIT licence, see LICENSE.\nC\n      PROGRAM CALDAY\n      INTEGER Y1, M1, D1, Y2, M2, D2, N, J, K, IOS\n      INTEGER JDN\n      LOGICAL VALID\n      CHARACTER*200 LINE\n      CHARACTER*9 DNAME(0:6)\n      DATA DNAME /'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY',\n     &            'FRIDAY', 'SATURDAY', 'SUNDAY'/\nC\n   10 READ (*, '(A)', IOSTAT=IOS) LINE\n      IF (IOS .NE. 0) STOP\n      IF (LINE .EQ. ' ') GO TO 10\n      LINE = ADJUSTL(LINE)\nC\n      IF (LINE(1:5) .EQ. 'DIFF ') THEN\n         READ (LINE(6:), *, IOSTAT=IOS) Y1, M1, D1, Y2, M2, D2\n         IF (IOS .NE. 0) GO TO 90\n         IF (.NOT. VALID(Y1, M1, D1)) GO TO 90\n         IF (.NOT. VALID(Y2, M2, D2)) GO TO 90\n         WRITE (*, '(I0)') JDN(Y2, M2, D2) - JDN(Y1, M1, D1)\nC\n      ELSE IF (LINE(1:4) .EQ. 'ADD ') THEN\n         READ (LINE(5:), *, IOSTAT=IOS) Y1, M1, D1, N\n         IF (IOS .NE. 0) GO TO 90\n         IF (.NOT. VALID(Y1, M1, D1)) GO TO 90\n         J = JDN(Y1, M1, D1) + N\n         CALL GREG(J, Y2, M2, D2)\n         IF (.NOT. VALID(Y2, M2, D2)) GO TO 90\n         WRITE (*, '(I4.4, A, I2.2, A, I2.2)') Y2, '-', M2, '-', D2\nC\n      ELSE IF (LINE(1:4) .EQ. 'DOW ') THEN\n         READ (LINE(5:), *, IOSTAT=IOS)"
+  },
+  {
+   "step": 1,
+   "action": {
+    "action": "replace",
+    "path": "/app/calday.f",
+    "old": "367*(M - 2 - A*12) / 12",
+    "new": "367*(M - 2 - A*12) / 12 + 1"
+   },
+   "observation": "replaced"
+  },
+  {
+   "step": 2,
+   "action": {
+    "action": "done"
+   }
+  }
+ ]
+}
